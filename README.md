@@ -27,3 +27,5 @@ Usage:
     
     perl score training_file gold_file result_file > score_file
 
+Notice:
+   All the data and the tool score come from:http://sighan.cs.uchicago.edu/bakeoff2005/
