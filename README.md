@@ -36,7 +36,11 @@ Usage:
 
 Notice:
    All the data and the tool score come from:http://sighan.cs.uchicago.edu/bakeoff2005/
+   
+   
 ----------------------------------------------------------------------------------
+
+
 1.    cwsBMM
 Description:
 
