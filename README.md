@@ -17,7 +17,7 @@ File Description:
 
 Tool:
 =============================================================================
-0.    cwsFMM
+ 0.    cwsFMM
 Description:
 
     Using Foward Maximum Match(FMM) algorithm to do Chinese Word Segamentation
@@ -41,7 +41,7 @@ Notice:
 ----------------------------------------------------------------------------------
 
 
-1.    cwsBMM
+ 1.    cwsBMM
 Description:
 
     Using Backward Maximum Match(BMM) algorithm to do Chinese Word Segamentation
