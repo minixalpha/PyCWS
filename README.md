@@ -16,14 +16,41 @@ File Description:
     socre/pku_test_gold.utf8 -- gold data
 
 Tool:
-
-    cwsFMM
+=============================================================================
+0.    cwsFMM
 Description:
 
     Using Foward Maximum Match(FMM) algorithm to do Chinese Word Segamentation
+
+=== TOTAL TRUE WORDS RECALL:    0.924
+
+=== TOTAL TEST WORDS PRECISION: 0.897
+
+=== F MEASURE:  0.910
+
 Usage:
 
     python cwsFMM.py training_file test_file result_file
+    
+    perl score training_file gold_file result_file > score_file
+
+Notice:
+   All the data and the tool score come from:http://sighan.cs.uchicago.edu/bakeoff2005/
+----------------------------------------------------------------------------------
+1.    cwsBMM
+Description:
+
+    Using Backward Maximum Match(BMM) algorithm to do Chinese Word Segamentation
+
+=== TOTAL TRUE WORDS RECALL:    0.920
+
+=== TOTAL TEST WORDS PRECISION: 0.895
+
+=== F MEASURE:  0.907
+
+Usage:
+
+    python cwsBMM.py training_file test_file result_file
     
     perl score training_file gold_file result_file > score_file
 
