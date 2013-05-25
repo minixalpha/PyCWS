@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Author: minix
-# Date:   2013-05-21
+# Date:   2013-05-22
 # Email:  minix007@foxmail.com
 
 # Chinese words segementation
@@ -64,7 +64,7 @@ def get_near_tag(contents, i, times):
     else: return contents[i*times+2]
 
 def isPu(char):
-    punctuation = [u'，', u'。', u'？', u'！', u'；', u'－', u'、', u'—', u'（',u'）',u'《', u'》',u'：',
+    punctuation = [u'，', u'。', u'？', u'！', u'；', u'－－', u'、', u'——', u'（',u'）',u'《', u'》',u'：',
         u'“',u'”',u'’',u'‘']
     if char in punctuation:
       return '1'
@@ -86,6 +86,94 @@ def get_class(char):
       return '3'
     else:
       return '4'
+
+def tag_item(line, model):
+    words_len = len(line)
+    taged_line = ''
+
+    index = range(0,words_len)
+    for i in index:
+      pre_char = get_near_char(line,i-1,1)
+      pre_pre_char = get_near_char(line,i-2,1)
+      cur_char = get_near_char(line,i,1)
+      next_char = get_near_char(line,i+1,1)
+      next_next_char = get_near_char(line,i+2,1)
+      feature = ( 'C-2='+pre_pre_char + ' ' + 'C-1='+pre_char + ' '
+          + 'C0='+cur_char + ' ' 
+          + 'C1='+next_char + ' ' + 'C2='+next_next_char + ' '
+          + 'C-2='+pre_pre_char+'C-1='+pre_char + ' '
+          + 'C-1='+pre_char+'C0='+cur_char + ' ' 
+          + 'C0='+cur_char+'C1='+next_char + ' '
+          + 'C1='+next_char+'C2='+next_next_char + ' '
+          + 'C-1='+pre_char+'C1='+next_char + ' '
+          + 'C-2='+pre_pre_char+'C-1='+pre_char+'C0='+cur_char + ' '
+          + 'C-1='+pre_char+'C0='+cur_char + 'C1='+next_char + ' ' 
+          + 'C0='+cur_char + 'C1='+next_char + 'C2='+next_next_char + ' '
+          + 'Pu='+isPu(cur_char) + ' '
+          + 'TC-2='+get_class(pre_pre_char)+'TC-1='+get_class(pre_char) 
+          + 'TC0='+get_class(cur_char)+'TC1='+get_class(next_char)  
+          + 'TC2=' + get_class(next_next_char)  + ''
+          )
+      feature_list = feature.split(' ')
+      str_feature = []
+      try:
+        for item in feature_list:
+          str_feature.append(item.encode('utf-8'))
+      except UnicodeDecodeError:
+        print 'item:' + item
+      label_prob_list = model.eval_all(str_feature)
+      label = max_prob(label_prob_list)
+      taged_line += (cur_char + '/' + label)
+
+    return taged_line
+
+def get_words(line, index, length):
+    if index < 0 or index >= length:
+      return ''
+    else:
+      return line[index]
+
+
+def get_words_len(line, index, length):
+    if index < 0 or index >= length:
+      return 0
+    else:
+      return len(line[index])
+
+def post_proc(result_file, model_file,final_result):
+    fr = codecs.open(result_file,'r','utf-8')
+    fw = codecs.open(final_result,'w','utf-8')
+    contents = fr.read()
+    contents_list = contents.split('\n')
+
+    m = MaxentModel()
+    m.load(model_file)
+    for line in contents_list:
+      odd = False
+      taged_line = ''
+      line = line.rstrip()
+      line_list = line.split(' ')
+      line_len = len(line_list)
+      if line_len % 2 != 0:
+        line_list.append('')
+        line_len = len(line_list)
+        odd = True
+      i = 0
+      while i < line_len:
+        len1 = get_words_len(line_list, i-1, line_len)
+        len2 = get_words_len(line_list, i, line_len)
+        len3 = get_words_len(line_list, i+1, line_len)
+        item = get_words(line_list,i-1,line_len) + get_words(line_list, i, line_len) + get_words(line_list,i+1,line_len)
+        taged_item = tag_item(item, m)
+        taged_line = taged_line + taged_item[len1*3:(len1+len2)*3]
+        i += 1
+      
+  #    if odd == True:
+  #      taged_line = taged_line[:-2]
+      taged_line += '\n\n\n'
+      fw.write(taged_line)
+
+    return contents_list
 
 
 def get_event(tag_file_path, event_file_path):
@@ -113,13 +201,14 @@ def get_event(tag_file_path, event_file_path):
           + 'C0='+cur_char+'C1='+next_char + ' '
           + 'C1='+next_char+'C2='+next_next_char + ' '
           + 'C-1='+pre_char+'C1='+next_char + ' '
+          + 'C-2='+pre_pre_char+'C-1='+pre_char+'C0='+cur_char + ' '
+          + 'C-1='+pre_char+'C0='+cur_char + 'C1='+next_char + ' ' 
+          + 'C0='+cur_char + 'C1='+next_char + 'C2='+next_next_char + ' '
           + 'Pu='+isPu(cur_char) + ' '
           + 'TC-2='+get_class(pre_pre_char)+'TC-1='+get_class(pre_char)
           + 'TC0='+get_class(cur_char)+'TC1='+get_class(next_char)
           + 'TC2='+get_class(next_next_char) + ' '
-          + 'T-1='+get_near_tag(contents,i-1,3) + ' '
-          + 'T-2='+get_near_tag(contents,i-2,3)
-          + '\r')
+          + '\r\n')
 
    
     #events = ''.join(event_list)
@@ -158,11 +247,14 @@ def get_feature(test_file_path, feature_file_path):
             + 'C0='+cur_char+'C1='+next_char + ' '
             + 'C1='+next_char+'C2='+next_next_char + ' '
             + 'C-1='+pre_char+'C1='+next_char + ' '
+            + 'C-2='+pre_pre_char+'C-1='+pre_char+'C0='+cur_char + ' '
+            + 'C-1='+pre_char+'C0='+cur_char + 'C1='+next_char + ' ' 
+            + 'C0='+cur_char + 'C1='+next_char + 'C2='+next_next_char + ' '
             + 'Pu='+isPu(cur_char) + ' '
             + 'TC-2='+get_class(pre_pre_char)+'TC-1='+get_class(pre_char)
             + 'TC0='+get_class(cur_char)+'TC1='+get_class(next_char)
             + 'TC2='+get_class(next_next_char) + ' '
-            + '\r')
+            + '\r\n')
 
       for item in feature_list:
         fw.write(item)
@@ -220,9 +312,6 @@ def tag_test(test_feature_file, trained_model_file,  tag_test_set_file):
   contents = fr.read()
   feature_list = contents.split('\r')
   feature_list.remove('\n')
-  #return feature_list
-  pre_tag = '_'
-  pre_pre_tag = '_'
   for feature in feature_list:
     if (feature == 'split'):
       fw.write('\n\n\n')
@@ -231,17 +320,14 @@ def tag_test(test_feature_file, trained_model_file,  tag_test_set_file):
     u_feature = feature.split(' ')
     for item in u_feature:
       str_feature.append(item.encode('utf-8'))
-    str_feature.append('T-1=' + pre_tag)
-    str_feature.append('T-2=' + pre_pre_tag)
     label_prob_list = m.eval_all(str_feature)
     label = max_prob(label_prob_list)
-    #print str_feature
+
     try:
       new_tag = str_feature[2].split('=')[1] + '/' + label
     except IndexError:
       print str_feature
     fw.write(new_tag.decode('utf-8'))
-    pre_pre_tag = pre_tag 
     pre_tag = label
   return feature_list
 
@@ -287,22 +373,24 @@ def main():
 
     # 标注训练集
     tag_training_set_file = training_file + ".tag"
-    tag_training_set(training_file, tag_training_set_file)
+#    tag_training_set(training_file, tag_training_set_file)
     print 'tag training set succeed'
 
     # 获取训练集特征
     feature_file_path = training_file + ".feature"
-    get_event(tag_training_set_file, feature_file_path)
+#    get_event(tag_training_set_file, feature_file_path)
     print 'get training set features succeed'
 
     # 测试集生成特征
     test_feature_file = test_file + ".feature"
-    get_feature(test_file, test_feature_file)
+#    get_feature(test_file, test_feature_file)
     print 'get test set features succeed'
 
     # 训练模型
     # times = [500,600,700,800,900,1000]
-    times = [300,400,500,600]
+    # times = [300,400,500,600]
+    #times = [600]
+    times = [700,800,900,1000]
     for time in times:
       trained_model_file = training_file + '.' + str(time) + ".model"
       training(feature_file_path, trained_model_file,time)
