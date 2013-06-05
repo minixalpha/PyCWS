@@ -78,7 +78,7 @@ def print_unicode_list(uni_list):
 def divideWords(mydict, sentence, maxlen):
     """ 
     根据词典对句子进行分词,
-    使用正向匹配的算法，从左到右扫描，遇到最长的词，
+    使用逆向匹配的算法，从右到左扫描，遇到最长的词，
     就将它切下来，直到句子被分割完闭
     """
     # 对句子逆置，以便用正向匹配算法进行实际的逆向处理

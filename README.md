@@ -19,10 +19,10 @@ File Description:
 
 Tool:
 =============================================================================
- # 0.    cwsFMM
+ # 0.    cwsBMM
 Description:
 
-    Using Foward Maximum Match(FMM) algorithm to do Chinese Word Segamentation
+    Using Backward Maximum Match(BMM) algorithm to do Chinese Word Segamentation
 
 === TOTAL TRUE WORDS RECALL:    0.924
 
@@ -32,7 +32,7 @@ Description:
 
 Usage:
 
-    python cwsFMM.py training_file test_file result_file
+    python cwsBMM.py training_file test_file result_file
     
     perl score training_file gold_file result_file > score_file
 
@@ -43,10 +43,10 @@ Notice:
 ----------------------------------------------------------------------------------
 
 
- # 1.    cwsBMM
+ # 1.    cwsFMM
 Description:
 
-    Using Backward Maximum Match(BMM) algorithm to do Chinese Word Segamentation
+    Using Forward Maximum Match(BMM) algorithm to do Chinese Word Segamentation
 
 === TOTAL TRUE WORDS RECALL:    0.920
 
@@ -56,7 +56,7 @@ Description:
 
 Usage:
 
-    python cwsBMM.py training_file test_file result_file
+    python cwsFMM.py training_file test_file result_file
     
     perl score training_file gold_file result_file > score_file
 
