@@ -24,7 +24,8 @@ def score_files(file_name_temp):
   for filename in filename_list:
     filename = filename.rstrip()
     fileid = filename.split('.')[-1]
-    cmd = 'perl ' + score_path + ' pku_training.utf8 pku_test_gold.utf8 ' + filename  + ' > ' + file_name_temp+'.score.' + fileid
+    name = filename.split('.')[0]
+    cmd = 'perl ' + score_path + ' pku_training.utf8 pku_test_gold.utf8 ' + filename  + ' > ' + name +'.score.' + fileid
     print cmd
     os.system(cmd)
 
@@ -60,8 +61,8 @@ def main():
     exit(-1)
 
   file_to_score = args[0]
-  #score_files(file_to_score)
-  (id_list, re_list) = extract_score_result(file_to_score + '.score')
+  score_files(file_to_score)
+  (id_list, re_list) = extract_score_result(file_to_score.split('.')[0] + '.score')
   id_len = len(id_list)
   i = 0
   print 'id'

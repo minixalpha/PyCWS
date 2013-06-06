@@ -1,8 +1,8 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Author: minix
-# Date:   2013-03-20
+# Author: 赵晓凯
+# Date:   2013-06-05
 # Email:  minix007@foxmail.com
 
 import codecs
@@ -11,7 +11,7 @@ import sys
 # 由规则处理的一些特殊符号
 numMath = [u'0', u'1', u'2', u'3', u'4', u'5', u'6', u'7', u'8', u'9']
 numMath_suffix = [u'.', u'%', u'亿', u'万', u'千', u'百', u'十', u'个']
-numCn = [u'一', u'二', u'三', u'四', u'五', u'六', u'七', u'八', u'九', u'〇', u'零']
+numCn = [u'一', u'二', u'三', u'四', u'五', u'六', u'七', u'八', u'九', u'○', u'零']
 numCn_suffix_date = [u'年', u'月', u'日']
 numCn_suffix_unit = [u'亿', u'万', u'千', u'百', u'十', u'个']
 special_char = [u'(', u')']
@@ -93,8 +93,9 @@ def divideWords(mydict, sentence):
             words = mydict[curword]
             for item in words:
                 itemlen = len(item)
-                if sentence[start:start+itemlen] == item and itemlen > maxlen:
+                if sentence[start:start+itemlen] == item and itemlen > maxlen and itemlen <= 5:
                     maxlen = itemlen
+
         result.append(sentence[start:start+maxlen])
         start = start + maxlen
     return result
@@ -102,7 +103,7 @@ def divideWords(mydict, sentence):
 def main():
     args = sys.argv[1:]
     if len(args) < 3:
-        print 'Usage: python cwsFMM.py dict_path test_path result_path'
+        print 'Usage: python ' + sys.argv[0] + ' dict_path test_path result_path'
         exit(-1)
     dict_path = args[0]
     test_path = args[1]

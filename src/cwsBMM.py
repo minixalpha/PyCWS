@@ -1,11 +1,12 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Author: minix
-# Date:   2013-03-20
+# Author: 赵晓凯
+# Date:   2013-06-05
 # Email:  minix007@foxmail.com
 
 # 使用BMM 进行中文分词
+# 添加了规则，用于匹配数字带来的新词
 
 import codecs
 import sys
@@ -13,7 +14,7 @@ import sys
 # 由规则处理的一些特殊符号
 numMath = [u'0', u'1', u'2', u'3', u'4', u'5', u'6', u'7', u'8', u'9']
 numMath_suffix = [u'.', u'%', u'亿', u'万', u'千', u'百', u'十', u'个']
-numCn = [u'一', u'二', u'三', u'四', u'五', u'六', u'七', u'八', u'九', u'〇', u'零']
+numCn = [u'一', u'二', u'三', u'四', u'五', u'六', u'七', u'八', u'九', u'○', u'零']
 numCn_suffix_date = [u'年', u'月', u'日']
 numCn_suffix_unit = [u'亿', u'万', u'千', u'百', u'十', u'个']
 special_char = [u'(', u')']
@@ -115,19 +116,17 @@ def divideWords(mydict, sentence, maxlen):
 
 def main():
     args = sys.argv[1:]
-    option_maxlen = args[0]
-    if len(args) < 5 or option_maxlen != '-maxlen':
-        print 'Usage: python cwsBMM.py -maxlen word_maxlen dict_path test_path result_path'
+    if len(args) < 3:
+        print 'Usage: python ' + sys.argv[0] + ' dict_path test_path result_path'
         exit(-1)
-    word_maxlen = int(args[1])
-    dict_path = args[2]
-    test_path = args[3]
-    result_path = args[4]
+    dict_path = args[0]
+    test_path = args[1]
+    result_path = args[2]
 
     dicts = genDict(dict_path)
     fr = codecs.open(test_path,'r','utf-8')
     test = fr.read()
-    result = divideWords(dicts,test,word_maxlen)
+    result = divideWords(dicts,test,5)
     fr.close()
     fw = codecs.open(result_path,'w','utf-8')
     for item in result:
