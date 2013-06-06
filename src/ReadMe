@@ -1,0 +1,35 @@
+1 系统环境：
+    Ubuntu 12.04
+    Python 2.7
+    Perl 5
+    Maxent
+
+2 文件说明：
+    cwsFMM_NRule.py     -- 不含规则的正向最大匹配算法
+    cwsFMM.py           -- 包含规则的正向最大匹配算法
+    cwsBMM_NRule.py     -- 不含规则的逆向最大匹配算法
+    cwsBMM.py           -- 包含规则的逆向最大匹配算法
+    cwsMaxEn-13f.py     -- 13特征最大熵字标注算法
+    cwsMaxEn-16f.py     -- 16特征最大熵字标注算法
+    pku_test.utf8       -- 测试文件
+    pku_training.utf8   -- 训练文件
+    pku_test_gold.utf8  -- 测试文件标准分词结果
+    score               -- 评分工具
+
+3 工具使用
+    分词：
+        Usage: python toolName training_file test_file result_file
+        eg:
+            python cwsFMM.py pku_training.utf8 pku_test.utf8 pku_test.result
+    评分：
+        perl score training_file pku_test_gold.utf8 result_file
+
+4 版权声明
+    pku_test.utf8, pku_training.utf8, score 均来自Bakeoff-2005官方网站：http://www.sighan.org/bakeoff2005/　版权归Bakeoff-2005所有
+    其余文件遵循GPL协议, 见LICENSE文件
+
+5 感谢
+  工具的开发使用了张乐博士的Maxent工具包, 在此特别感谢
+  工具主页：http://homepages.inf.ed.ac.uk/lzhang10/maxent_toolkit.html
+  工具Github主页:https://github.com/lzhang10/maxent
+
