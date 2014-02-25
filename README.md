@@ -1,4 +1,5 @@
-Requirements:
+#Requirements:
+
   * Ubuntu 12.04
   * Python 2.7.3
   * Perl 5
@@ -17,10 +18,12 @@ File Description:
 
     ref -- reference papers of the project
 
-Tool:
-=============================================================================
- # 0.    cwsBMM
-Description:
+#Tool:
+
+
+## cwsBMM
+
+  Description:
 
     Using Backward Maximum Match(BMM) algorithm to do Chinese Word Segamentation
 
@@ -39,12 +42,11 @@ Usage:
 Notice:
    All the data and the tool score come from:http://sighan.cs.uchicago.edu/bakeoff2005/
    
-   
-----------------------------------------------------------------------------------
 
 
- # 1.    cwsFMM
-Description:
+## cwsFMM
+
+  Description:
 
     Using Forward Maximum Match(BMM) algorithm to do Chinese Word Segamentation
 
@@ -59,6 +61,7 @@ Usage:
     python cwsFMM.py training_file test_file result_file
     
     perl score training_file gold_file result_file > score_file
+
 
 Notice:
    All the data and the tool score come from:http://sighan.cs.uchicago.edu/bakeoff2005/
